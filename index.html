@@ -1,64 +1,81 @@
-import 'dart:io';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Rifa</title>
+    <style>
+        /* Estilos CSS para mejorar la presentación */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aplicación de Rifa</h1>
+        <p>Selecciona un número del 00 al 99:</p>
+        <select id="numeroSeleccionado">
+            <option value="">Selecciona un número</option>
+            <!-- Generar opciones del 00 al 99 -->
+            <script>
+                for (let i = 0; i < 100; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i < 10 ? '0' + i : i.toString();
+                    document.getElementById('numeroSeleccionado').appendChild(option);
+                }
+            </script>
+        </select>
+        <div id="infoUsuario" style="display: none;">
+            <h2>Ingresa tus datos:</h2>
+            <form>
+                <label for="telefono">Número de teléfono:</label>
+                <input type="tel" id="telefono" required><br>
 
-class RaffleApp {
-  Map<int, String> raffleNumbers = {};
-  Map<int, Map<String, String>> userEntries = {};
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" required><br>
 
-  void start() {
-    while (true) {
-      print('Bienvenido a la Rifa!');
-      print('1. Seleccionar un número');
-      print('2. Salir');
-      var choice = int.parse(stdin.readLineSync()!);
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" required><br>
 
-      switch (choice) {
-        case 1:
-          selectNumber();
-          break;
-        case 2:
-          exit(0);
-          break;
-        default:
-          print('Opción no válida. Inténtalo de nuevo.');
-      }
-    }
-  }
+                <button type="button" id="registrar">Registrar</button>
+            </form>
+        </div>
+    </div>
 
-  void selectNumber() {
-    print('Selecciona un número del 00 al 99:');
-    var number = int.parse(stdin.readLineSync()!);
+    <script>
+        const numeroSeleccionado = document.getElementById('numeroSeleccionado');
+        const infoUsuario = document.getElementById('infoUsuario');
+        const registrarBtn = document.getElementById('registrar');
 
-    if (number < 0 || number > 99) {
-      print('Número no válido. Inténtalo de nuevo.');
-      return;
-    }
+        numeroSeleccionado.addEventListener('change', function () {
+            if (numeroSeleccionado.value !== '') {
+                infoUsuario.style.display = 'block';
+            } else {
+                infoUsuario.style.display = 'none';
+            }
+        });
 
-    if (raffleNumbers.containsKey(number)) {
-      print('Este número ya ha sido seleccionado. Inténtalo de nuevo.');
-      return;
-    }
+        registrarBtn.addEventListener('click', function () {
+            const numero = numeroSeleccionado.value;
+            const telefono = document.getElementById('telefono').value;
+            const correo = document.getElementById('correo').value;
+            const nombre = document.getElementById('nombre').value;
 
-    print('Introduce tu número de teléfono:');
-    var phoneNumber = stdin.readLineSync()!;
-    print('Introduce tu correo electrónico:');
-    var email = stdin.readLineSync()!;
-    print('Introduce tu nombre completo:');
-    var fullName = stdin.readLineSync()!;
-
-    var userInfo = {
-      'Teléfono': phoneNumber,
-      'Correo': email,
-      'Nombre Completo': fullName,
-    };
-
-    raffleNumbers[number] = fullName;
-    userEntries[number] = userInfo;
-
-    print('¡Felicidades, has seleccionado el número $number!');
-  }
-}
-
-void main() {
-  var app = RaffleApp();
-  app.start();
-}
+            // Aquí puedes enviar los datos a un servidor para su registro
+            console.log('Número:', numero);
+            console.log('Teléfono:', telefono);
+            console.log('Correo:', correo);
+            console.log('Nombre:', nombre);
+        });
+    </script>
+</body>
+</html>
